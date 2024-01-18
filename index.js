@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import authRoutes from './routes/auth.js';
+import userRoutes from './routes/user.js';
 import mongoose from 'mongoose';
 
 dotenv.config()
@@ -11,7 +12,8 @@ app.use(express.json())
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
 app.use(morgan("common"))
 const PORT =  process.env.PORT;
-app.use('/auth',authRoutes);
+app.use('/api/auth',authRoutes);
+app.use('/api/user',userRoutes);
 mongoose.connect(process.env.MONGO_URL).then(()=>{
     app.listen(PORT,"0.0.0.0",()=>{
         console.log(`Server running on: ${PORT}`);
