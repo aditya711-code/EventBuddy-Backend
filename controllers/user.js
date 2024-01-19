@@ -2,6 +2,8 @@ import User from "../models/User.js";
 import UserInterest from "../models/UserInterest.js";
 import { interests } from "../utils/interests.js";
 
+// ADD INTEREST
+
 export const addInterests=async(req,res)=>{
     try{
         const{userId}=req.params;
@@ -34,6 +36,9 @@ export const addInterests=async(req,res)=>{
     }
 }
 
+
+// REMOVE INTEREST
+
 export const removeInterests=async(req,res)=>{
     try{
         const {userId}=req.params;
@@ -59,6 +64,46 @@ export const removeInterests=async(req,res)=>{
         res.status(500).json({error:"Failed to remove interests"});
     }
 }
+
+// GET USER INFO BY USER ID
+
+export const getUserById = async (req, res) => {
+    
+    try {
+        const { userId } = req.params;
+        const user = await User.findOne({ _id: userId });
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json({ user });
+    } catch (error) {
+        console.log("Error", error);
+        res.status(500).json({ error: "Failed to fetch user" });
+    }
+};
+
+// GET USER INTEREST
+
+export const getUserInterests = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const userInterests = await UserInterest.findOne({ userId });
+
+        if (!userInterests) {
+            return res.status(404).json({ error: "User has no interests." });
+        }
+
+        res.status(200).json({ interests: userInterests.interests });
+    } catch (error) {
+        console.log("Error", error);
+        res.status(500).json({ error: "Failed to fetch user interests" });
+    }
+};
+
+
+// DELETE USER
 
 export const deleteUser=async(req,res)=>{
     try{
