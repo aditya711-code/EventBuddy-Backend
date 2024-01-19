@@ -52,13 +52,10 @@ export const removeInterests=async(req,res)=>{
         {
             return res.status(404).json({ error: "User has no interests." });
         }
-        interestsToRemove.forEach((interest) => {
-            const indexToRemove = userInterests.interests.indexOf(interest);
-            if (indexToRemove !== -1) {
-            userInterests.interests.splice(indexToRemove, 1);
-          }
-        });
-        console.log("interestremove",interestsToRemove,userInterests)
+
+        const idsToRemove = interestsToRemove.map((interest)=>interests[interest.toLowerCase()])
+        userInterests.interests = userInterests.interests.filter((interestId) => !idsToRemove.includes(interestId));
+
         await userInterests.save();
         res.status(200).json({ message: "Interests removed successfully" });
     }catch(error)
@@ -110,6 +107,11 @@ export const getUserInterests = async (req, res) => {
 
 export const deleteUser=async(req,res)=>{
     try{
+        
+        const{userId}=req.params;
+        await User.findByIdAndDelete(userId);
+        await UserInterest.deleteOne({userId:userId});
+        res.status(200).json({message:"User deleted successfully"})
 
     }catch(error)
     {
