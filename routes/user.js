@@ -1,7 +1,7 @@
 import express from 'express'
 import { verifyToken} from '../middleware/auth.js';
 import {getEventsUnderCategory,getRegisteredEvents,getUserById,getUserInterests,getUsersRegisteredForEvent,registerForEvent } from '../controllers/user.js';
-import { addInterests,removeInterests ,deleteUser} from '../controllers/user.js';
+import { addInterests,removeInterests,deleteUser } from '../controllers/user.js';
 
 const router=express.Router();
 

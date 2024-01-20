@@ -194,11 +194,11 @@ export const deleteUser=async(req,res)=>{
   export const getEventsUnderCategory = async (req, res) => {
     try {
       const { categoryId } = req.params;
-      const apiUrl = "https://www.eventbriteapi.com/v3/organizations/1969278917523/events";
+      const apiUrl = `https://www.eventbriteapi.com/v3/organizations/${process.env.ORGANIZATION_ID}/events`;
         
       
       const headers = {
-        Authorization: `Bearer FH4Y2J7QVMBDJIXBB77L`,
+        Authorization: `Bearer ${apiKey}`,
       };
       
       const response = await axios.get(apiUrl, { headers });

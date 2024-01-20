@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
+import eventRoutes from './routes/event.js';
 import mongoose from 'mongoose';
 
 dotenv.config()
@@ -15,6 +16,7 @@ const PORT =  process.env.PORT;
 
 app.use('/api/auth',authRoutes);
 app.use('/api/user',userRoutes);
+app.use('/api/events',eventRoutes);
 
 mongoose.connect(process.env.MONGO_URL).then(()=>{
     app.listen(PORT,"0.0.0.0",()=>{
