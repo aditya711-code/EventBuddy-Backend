@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import UserInterest from "../models/UserInterest.js";
 import { interests } from "../utils/interests.js";
+import axios from "axios";
+
 
 // ADD INTEREST
 
@@ -119,3 +121,96 @@ export const deleteUser=async(req,res)=>{
         res.status(500).json({error:"Failed to delete "})
     }
 }
+
+// GET USER'S REGISTERED EVENTS
+  
+  export const getRegisteredEvents = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const user = await User.findOne({ _id: userId });
+  
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      res.status(200).json({ registeredEvents: user.registeredEvents });
+    } catch (error) {
+      console.log("Error", error);
+      res.status(500).json({ error: "Failed to fetch registered events" });
+    }
+  };
+
+  
+// MAKING USER REGISTER FOR AN EVENT
+
+  export const registerForEvent = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const { eventId, eventName } = req.body;
+
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      // Check if the user is already registered for the event
+      if (user.registeredEvents.find((event) => event.eventId === eventId)) {
+        return res.status(400).json({ error: "User is already registered for the event" });
+      }
+      
+      user.registeredEvents.push({ eventId, eventName });
+      await user.save();
+  
+      res.status(200).json({ message: "User registered for the event successfully" });
+    } catch (error) {
+      console.log("Error", error);
+      res.status(500).json({ error: "Failed to register for the event" });
+    }
+  };
+
+
+// GET USERS REGISTERED FOR EVENTS
+
+
+  export const getUsersRegisteredForEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+  
+      const users = await User.find({
+        "registeredEvents.eventId": eventId,
+      });
+  
+      res.status(200).json({ users });
+    } catch (error) {
+      console.log("Error", error);
+      res.status(500).json({ error: "Failed to fetch users registered for the event" });
+    }
+  };
+
+
+
+// GET EVENTS UNDER A PARTICULAR INTEREST
+
+  export const getEventsUnderCategory = async (req, res) => {
+    try {
+      const { categoryId } = req.params;
+      const apiUrl = `https://www.eventbriteapi.com/v3/organizations/${process.env.ORGANIZATION_ID}/events`;
+        
+      
+      const headers = {
+        Authorization: `Bearer ${apiKey}`,
+      };
+      
+      const response = await axios.get(apiUrl, { headers });
+      const eventsData = response.data.events;
+
+      // Filter events based on the provided category_id
+      const eventsUnderCategory = eventsData.filter((event) => event.category_id === categoryId);
+  
+      res.status(200).json({ events: eventsUnderCategory });
+    } catch (error) {
+      console.error("Error", error);
+      res.status(500).json({ error: "Failed to fetch events under the category" });
+    }
+};
+
