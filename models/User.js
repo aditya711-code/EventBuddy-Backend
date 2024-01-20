@@ -25,8 +25,20 @@ const UserSchema = new mongoose.Schema(
       required: true,
       min: 50,
     },
-   
+    registeredEvents: [
+      {
+        eventId: {
+          type: String,
+          required: true,
+        },
+        eventName: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
+  
   {
     timestamps: true,
   }
