@@ -6,11 +6,12 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import eventRoutes from './routes/event.js';
 import mongoose from 'mongoose';
-
+import cors from 'cors'
 dotenv.config()
 const app=express();
 app.use(express.json())
 app.use(bodyParser.json({ limit: "50mb", extended: true }));
+app.use(cors());
 app.use(morgan("common"))
 const PORT =  process.env.PORT;
 

@@ -1,11 +1,12 @@
 import axios from "axios";
 import Event from "../models/Event.js";
 import { city } from "../utils/city.js";
+import { API_URLS } from "../utils/constant.js";
 export const getEvents=async(req,res)=>{
     try{
 
         const apiKey = process.env.THIRD_PARTY_API_KEY;
-        const apiUrl = `https://www.eventbriteapi.com/v3/organizations/${process.env.ORGANIZATION_ID}/events`;
+        const apiUrl = API_URLS.getEvents();
         const response = await axios.get(apiUrl, {
           headers: {
             Authorization: `Bearer ${apiKey}`,
@@ -48,6 +49,25 @@ export const getEventsByCity=async(req,res)=>{
     const data=await Event.find({cityId:cityId});
   
     res.status(200).json(data);
+  }catch(error)
+  {
+    console.log(`Error finding events by city ${error}`);
+    res.status(500).json(error);
+  }
+}
+
+export const getEventById=async(req,res)=>{
+  try{
+    const{eventId}=req.params;
+    const apiKey = process.env.THIRD_PARTY_API_KEY;
+    const apiUrl = API_URLS.getEventById(eventId);
+    const response = await axios.get(apiUrl, {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    });
+    const responseData=response.data
+    res.status(200).json({ data: responseData });
   }catch(error)
   {
     console.log(`Error finding events by city ${error}`);
