@@ -24,7 +24,7 @@ export const getEvents=async(req,res)=>{
               name:event.name.text,
               description:event.description.text,
               summary:event.summary,
-              imgUrl:event.logo.original.url,
+              imgUrl:event.logo.original.url?event.logo.original.url:null,
               cityId:event.venue_id,
 
 

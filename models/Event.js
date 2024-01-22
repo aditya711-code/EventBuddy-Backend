@@ -19,7 +19,7 @@ const EventSchema = new mongoose.Schema(
   },
   imgUrl: {
     type: String,
-    required: true,
+    
   },
   cityId: {
     type: Number,
