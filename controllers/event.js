@@ -2,6 +2,7 @@ import axios from "axios";
 import Event from "../models/Event.js";
 import { city } from "../utils/city.js";
 import { API_URLS } from "../utils/constant.js";
+import { interestsid } from "../utils/interests.js";
 export const getEvents=async(req,res)=>{
     try{
 
@@ -44,9 +45,9 @@ export const getEvents=async(req,res)=>{
 export const getEventsByCity=async(req,res)=>{
   try{
 
-    const{cityName}=req.body;
-    const cityId=city[cityName];
-    const data=await Event.find({cityId:cityId});
+    const{cityName}=req.query;
+    const cityId = city[cityName];
+    const data = await Event.find({ cityId: cityId });
   
     res.status(200).json(data);
   }catch(error)
@@ -66,7 +67,10 @@ export const getEventById=async(req,res)=>{
         Authorization: `Bearer ${apiKey}`,
       },
     });
-    const responseData=response.data
+    const responseData=response.data;
+    const interestId = responseData.category_id; // Assuming category_id represents interest
+    const interest = interestsid[interestId] || null;
+    responseData.interest=interest;
     res.status(200).json({ data: responseData });
   }catch(error)
   {
