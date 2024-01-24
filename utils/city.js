@@ -8,7 +8,6 @@ export const city = {
   Ahmedabad: 193681199,
   Pune: 193769569,
   Surat: 193768929,
-  Jaipur: 1011,
   Lucknow: [193681839, 193768679],
   Kanpur: 193769139,
   Nagpur: 193769039,

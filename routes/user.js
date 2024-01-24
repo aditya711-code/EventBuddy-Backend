@@ -13,7 +13,6 @@ router.delete("/:userId",verifyToken,deleteUser);
 router.get("/:userId/registered-events", verifyToken, getRegisteredEvents);
 router.post("/:userId/register-for-event", verifyToken, registerForEvent);
 router.get("/events/:eventId/registered-users", verifyToken,getUsersRegisteredForEvent);
-
-router.get("/categories/:categoryId/events", verifyToken, getEventsUnderCategory);
+router.get("/categories/events/:categoryIds",verifyToken,getEventsUnderCategory);
 
 export default router;
